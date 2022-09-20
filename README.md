@@ -107,7 +107,7 @@ Other input arguments can be used as appropriate. To show all available argument
 python mta_evaluation.py -h
 ```
 
-#### 單相機和多相機行人追蹤準確度評分
+#### Single camera and multi camera person tracking accuracy scores
 Calculate the person tracking accuracy of each frame according to the tracking result txt file, and use [WDA tracker](https://github.com/ChienHsuan/wda_tracker) to calculate the accuracy indicators, including ID-related accuracy indicators such as IDF1, IDP , IDR, IDS, and also calculate the processing speed FPS.
 
 ##### 1. Single camera tracking (SCT)
