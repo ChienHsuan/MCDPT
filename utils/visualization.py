@@ -73,6 +73,7 @@ def visualize_multicam_detections(frame, all_objects, fps='', show_all_detection
                cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
     return vis
 
+
 def draw_detection_range(frame, w_skip_ratio, h_skip_ratio):
     frame_shape = frame.shape
     left_b = int(frame_shape[1] * w_skip_ratio)

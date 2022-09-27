@@ -115,6 +115,13 @@ def Tracking(args, config, frame_buffer, bbox_buffer, process_stat):
     else:
         raise NameError(f'Not supported method: {args.method}.')
         
+    if args.video_streaming:
+        gst_str_rtp = f'appsrc ! videoconvert ! video/x-raw,format=I420 ! jpegenc ! rtpjpegpay ! udpsink host={args.broker_url} port=5{str(args.cam_id).zfill(4)}'
+        frame_size, fps = config['visualization_config']['max_window_size'], config['visualization_config']['out_fps']
+        video_streaming = cv2.VideoWriter(gst_str_rtp, cv2.CAP_GSTREAMER, 0, fps, frame_size, True)
+    else:
+        video_streaming = None
+
     if len(args.output_video):
         frame_size, fps = config['visualization_config']['max_window_size'], config['visualization_config']['out_fps']
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
@@ -160,6 +167,8 @@ def Tracking(args, config, frame_buffer, bbox_buffer, process_stat):
         draw_detection_range(vis, config['mct_config']['w_skip_ratio'], config['mct_config']['h_skip_ratio'])
         if not args.no_show:
             cv2.imshow('Output', vis)
+        if video_streaming:
+            video_streaming.write(vis)
         if output_video:
             output_video.write(cv2.resize(vis, frame_size))
 
@@ -195,10 +204,11 @@ def main():
     parser.add_argument('--history_file', type=str, default='', required=False,
                         help='Optional. Path to file in JSON format to save results of the demo')
     parser.add_argument("--no_show", help="Optional. Don't show output", action='store_true')
-    parser.add_argument('--device1', type=str, default='CPU')
-    parser.add_argument('--device2', type=str, default='CPU')
-    parser.add_argument('--broker_url', type=str, required=True, help='MQTT broker url')
-    parser.add_argument('--method', type=str, default='mtmct')
+    parser.add_argument('--video_streaming', action='store_true', help='Stream output video to server using GStreamer')
+    parser.add_argument('--device1', type=str, default='CPU', help='Device for detection model inference')
+    parser.add_argument('--device2', type=str, default='CPU', help='Device for feature model inference')
+    parser.add_argument('--broker_url', type=str, required=True, help='MQTT Broker url')
+    parser.add_argument('--method', type=str, default='mtmct', help='Object tracking method')
     parser.add_argument('--cam_id', type=int, default=1, help='Camera ID')
     parser.add_argument('--initial_id', type=int, default=1, help='Initial ID of the first track')
     parser.add_argument('-l', '--cpu_extension',
