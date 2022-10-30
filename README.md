@@ -179,7 +179,7 @@ The following are the experiment results in this thesis:
 | :---: | :---: | :---: |
 | This thesis | 0.8423 | 59 |
 
-| method | FPS(Cam 1) | FPS(Cam 1) | FPS(Cam 1) | FPS(Avg) |
+| method | FPS(Cam 1) | FPS(Cam 2) | FPS(Cam 3) | FPS(Avg) |
 | :---: | :---: | :---: | :---: | :---: |
 | This thesis | 43.8 | 24.7 | 32.2 | 33.6 |
 
